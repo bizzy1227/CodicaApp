@@ -1,6 +1,6 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { CategoryService } from '../category/category.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -9,6 +9,8 @@ import { BankService } from '../bank/bank.service';
 import { PageOptionsDto } from '../global-definitions/dto/page-options.dto';
 import { PageDto } from '../global-definitions/dto/page.dto';
 import { PageMetaDto } from '../global-definitions/dto/page-meta.dto';
+import { GetStatisticDto } from './dto/get-statistic.dto';
+import { Statistic } from './types/statistic';
 
 @Injectable()
 export class TransactionService {
@@ -78,5 +80,35 @@ export class TransactionService {
     const transaction = await this.transactionRepository.findOne(id, { relations: ['bank'] });
     await this.transactionRepository.delete(id);
     await this.bankService.update(transaction.bank.id, { balance: transaction.bank.balance - transaction.amount });
+  }
+
+  async getStatistic({ fromPeriod, toPeriod, categoryIds }: GetStatisticDto): Promise<Statistic> {
+
+    if (!fromPeriod || !toPeriod || !categoryIds) {
+      throw new BadRequestException('Invalid request body');
+    }
+
+    const transactions = await this.transactionRepository.find({
+      where: {
+        createdAt: Between(fromPeriod, toPeriod),
+      },
+      relations: ['categories']
+    });
+
+    const result: Statistic = {};
+
+    transactions.forEach(tx => {
+      tx.categories.forEach(category => {
+        if (categoryIds.length === 0 || categoryIds.includes(category.id)) {
+          if (result.hasOwnProperty(category.name)) {
+            result[category.name] += tx.amount;
+          } else {
+            result[category.name] = tx.amount;
+          }
+        }
+      });
+    });
+
+    return result;
   }
 }

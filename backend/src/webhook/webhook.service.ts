@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { Transaction } from '../transaction/transaction.entity';
-import { ResultType } from '../global-definitions/types/response-type';
+import { ResultType } from '../global-definitions/constants/response-type';
 import { TransactionService } from '../transaction/transaction.service';
 import { WebhookCreateTransactionDto } from './dto/webhook-create-transaction.dto';
 
