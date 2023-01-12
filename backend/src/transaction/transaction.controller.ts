@@ -1,6 +1,7 @@
-import { Controller, Get, Param, Delete, Query, Req, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Query, Res, HttpStatus, Body, Post } from '@nestjs/common';
 import { PageOptionsDto } from '../global-definitions/dto/page-options.dto';
 import { PageDto } from '../global-definitions/dto/page.dto';
+import { GetTransactionStatisticDto } from './dto/get-transaction-statistic.dto';
 import { Transaction } from './transaction.entity';
 import { TransactionService } from './transaction.service';
 import { Statistic } from './types/statistic';
@@ -16,12 +17,12 @@ export class TransactionController {
     return await this.transactionService.findAll(pageOptionsDto);
   }
 
-  @Get('/statistic')
+  @Post('/statistic')
   async getStatistic(
-    @Req() req,
     @Res() res,
+    @Body() body: GetTransactionStatisticDto,
   ): Promise<Statistic> {
-    const result = await this.transactionService.getStatistic(req.body);
+    const result = await this.transactionService.getStatistic(body);
     return res.status(HttpStatus.OK).json(result);
   }
 

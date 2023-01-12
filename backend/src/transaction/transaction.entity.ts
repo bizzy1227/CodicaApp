@@ -1,5 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { BaseDto } from '../global-definitions/dto/base.dto';
 import { TransactionType } from './types/transaction-type';
 import { Bank } from '../bank/bank.entity';
@@ -7,10 +8,12 @@ import { Category } from '../category/category.entity';
 
 @Entity()
 export class Transaction extends BaseDto {
+  @ApiProperty()
   @Column()
   @IsNumber()
   amount: number;
 
+  @ApiProperty()
   @Column({
     type: 'enum',
     enum: TransactionType,

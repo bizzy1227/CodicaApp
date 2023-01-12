@@ -1,9 +1,8 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './category.entity';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateUpdateCategoryDto } from './dto/create-update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -12,7 +11,7 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async create(createCategoryDto: CreateCategoryDto) {
+  async create(createCategoryDto: CreateUpdateCategoryDto) {
     await this.categoryRepository.save(createCategoryDto);
   }
 
@@ -30,7 +29,7 @@ export class CategoryService {
     return category;
   }
 
-  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+  async update(id: number, updateCategoryDto: CreateUpdateCategoryDto) {
     const category = await this.categoryRepository.findOne({ id });
     
     if (!category) {

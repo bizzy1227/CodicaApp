@@ -9,7 +9,7 @@ import { BankService } from '../bank/bank.service';
 import { PageOptionsDto } from '../global-definitions/dto/page-options.dto';
 import { PageDto } from '../global-definitions/dto/page.dto';
 import { PageMetaDto } from '../global-definitions/dto/page-meta.dto';
-import { GetStatisticDto } from './dto/get-statistic.dto';
+import { GetTransactionStatisticDto } from './dto/get-transaction-statistic.dto';
 import { Statistic } from './types/statistic';
 
 @Injectable()
@@ -82,7 +82,7 @@ export class TransactionService {
     await this.bankService.update(transaction.bank.id, { balance: transaction.bank.balance - transaction.amount });
   }
 
-  async getStatistic({ fromPeriod, toPeriod, categoryIds }: GetStatisticDto): Promise<Statistic> {
+  async getStatistic({ fromPeriod, toPeriod, categoryIds }: GetTransactionStatisticDto): Promise<Statistic> {
 
     if (!fromPeriod || !toPeriod || !categoryIds) {
       throw new BadRequestException('Invalid request body');
