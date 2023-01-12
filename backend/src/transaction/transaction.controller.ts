@@ -1,4 +1,6 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Query } from '@nestjs/common';
+import { PageOptionsDto } from '../global-definitions/dto/page-options.dto';
+import { PageDto } from '../global-definitions/dto/page.dto';
 import { Transaction } from './transaction.entity';
 import { TransactionService } from './transaction.service';
 
@@ -7,8 +9,10 @@ export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
   @Get()
-  async findAll(): Promise<Transaction[]> {
-    return await this.transactionService.findAll();
+  async findAll(
+    @Query() pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<Transaction>> {
+    return await this.transactionService.findAll(pageOptionsDto);
   }
 
   @Delete(':id')

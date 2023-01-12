@@ -6,6 +6,9 @@ import { CategoryService } from '../category/category.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Transaction } from './transaction.entity';
 import { BankService } from '../bank/bank.service';
+import { PageOptionsDto } from '../global-definitions/dto/page-options.dto';
+import { PageDto } from '../global-definitions/dto/page.dto';
+import { PageMetaDto } from '../global-definitions/dto/page-meta.dto';
 
 @Injectable()
 export class TransactionService {
@@ -53,8 +56,22 @@ export class TransactionService {
     }
   }
 
-  async findAll(): Promise<Transaction[]> {
-    return await this.transactionRepository.find();
+  async findAll(
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<Transaction>> {
+    const queryBuilder = this.transactionRepository.createQueryBuilder("transaction");
+
+    queryBuilder
+      .orderBy("transaction.createdAt", pageOptionsDto.order)
+      .skip(pageOptionsDto.skip)
+      .take(pageOptionsDto.take);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
+
+    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
+
+    return new PageDto(entities, pageMetaDto);
   }
 
   async remove(id: number): Promise<void>  {
