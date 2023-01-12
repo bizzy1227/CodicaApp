@@ -8,6 +8,7 @@ import { PostgresConfigService } from './config/db/postgres/config.service';
 import { CategoryModule } from './category/category.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { WebhookModule } from './webhook/webhook.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WebhookModule } from './webhook/webhook.module';
     CategoryModule,
     TransactionModule,
     WebhookModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
