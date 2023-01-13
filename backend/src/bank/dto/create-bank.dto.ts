@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsNotEmpty, IsPositive } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 
 export class CreateBankDto {
   @ApiProperty()
@@ -10,6 +10,5 @@ export class CreateBankDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
   balance: number; 
 }

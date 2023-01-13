@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { Category } from '../category/category.entity';
@@ -14,6 +14,7 @@ import { Statistic } from './types/statistic';
 
 @Injectable()
 export class TransactionService {
+  private readonly logger = new Logger(TransactionService.name);
   constructor(
     @InjectRepository(Transaction)
     private transactionRepository: Repository<Transaction>,
@@ -27,15 +28,21 @@ export class TransactionService {
 
       for await (const id of createTransactionDto.categoriesIds) {
         const category = await this.categoryService.findOne(id);
+
         if (!category) {
+          this.logger.error('create: Category not found');
+          this.logger.error(category);
           throw new NotFoundException('Category not found');
         }
+
         categories.push(category);
       }
   
       const bank = await this.bankService.findOne(createTransactionDto.bankId);
   
       if (!bank) {
+        this.logger.error('create: Bank not found');
+        this.logger.error(bank);
         throw new NotFoundException('Bank not found');
       }
   
@@ -46,6 +53,8 @@ export class TransactionService {
       });
   
       if (!transaction) {
+        this.logger.error('create: Save transaction failed');
+        this.logger.error(transaction);
         throw new InternalServerErrorException();
       }
 
@@ -53,7 +62,7 @@ export class TransactionService {
 
       return transaction;
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
       return e;
     }
   }
@@ -78,15 +87,19 @@ export class TransactionService {
 
   async remove(id: number): Promise<void>  {
     const transaction = await this.transactionRepository.findOne(id, { relations: ['bank'] });
+
+    if (!transaction) {
+      this.logger.error('remove: Transaction not found');
+      this.logger.error(transaction);
+      throw new NotFoundException('Transaction not found');
+    }
+
     await this.transactionRepository.delete(id);
     await this.bankService.update(transaction.bank.id, { balance: transaction.bank.balance - transaction.amount });
   }
 
   async getStatistic({ fromPeriod, toPeriod, categoryIds }: GetTransactionStatisticDto): Promise<Statistic> {
-
-    if (!fromPeriod || !toPeriod || !categoryIds) {
-      throw new BadRequestException('Invalid request body');
-    }
+    const result: Statistic = {};
 
     const transactions = await this.transactionRepository.find({
       where: {
@@ -95,7 +108,10 @@ export class TransactionService {
       relations: ['categories']
     });
 
-    const result: Statistic = {};
+    if (transactions.length === 0) {
+      this.logger.log('getStatistic: Transactions not found');
+      return result;
+    }
 
     transactions.forEach(tx => {
       tx.categories.forEach(category => {

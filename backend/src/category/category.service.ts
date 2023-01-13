@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './category.entity';
@@ -6,6 +6,7 @@ import { CreateUpdateCategoryDto } from './dto/create-update-category.dto';
 
 @Injectable()
 export class CategoryService {
+  private readonly logger = new Logger(CategoryService.name);
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
@@ -23,6 +24,8 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne({ id });
 
     if (!category) {
+      this.logger.error('findOne: Category not found');
+      this.logger.error(category);
       throw new NotFoundException('Category not found');
     }
 
@@ -33,6 +36,8 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne({ id });
     
     if (!category) {
+      this.logger.error('update: Category not found');
+      this.logger.error(category);
       throw new NotFoundException('Category not found');
     }
 
@@ -46,6 +51,7 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne(id, { relations: ['transactions'] });
 
     if (category.transactions.length) {
+      this.logger.error(`remove: Current category has ${category.transactions.length} transactions`);
       throw new ForbiddenException('Current category has transactions');
     }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { Transaction } from '../transaction/transaction.entity';
 import { ResultType } from '../global-definitions/constants/response-type';
@@ -7,21 +7,23 @@ import { WebhookCreateTransactionDto } from './dto/webhook-create-transaction.dt
 
 @Injectable()
 export class WebhookService {
+  private readonly logger = new Logger(WebhookService.name);
   constructor(
     private transactionService: TransactionService,
   ) {}
 
-  async createTransaction(webhookCreateTransactionDto: WebhookCreateTransactionDto): Promise<void> {
+  async createTransaction({ createTransactionDto, callbackUrl }: WebhookCreateTransactionDto): Promise<void> {
     try {
-      const result: Transaction = await this.transactionService.create(webhookCreateTransactionDto.createTransactionDto);
+      const result: Transaction = await this.transactionService.create(createTransactionDto);
       const isErorr = result instanceof Error;
-      await axios.post(webhookCreateTransactionDto.callbackUrl, {
+      this.logger.log(`createTransaction: Send result to url ${callbackUrl}`);
+      await axios.post(callbackUrl, {
         transaction: isErorr ? null : result,
         webhookStatus: isErorr ? ResultType.FAILED : ResultType.SUCCESSFUL,
         error: isErorr ? result : null,
       });
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
     }
   }
 }

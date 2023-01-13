@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bank } from './bank.entity';
@@ -7,6 +7,7 @@ import { UpdateBankDto } from './dto/update-bank.dto';
 
 @Injectable()
 export class BankService {
+  private readonly logger = new Logger(BankService.name);
   constructor(
     @InjectRepository(Bank)
     private bankRepository: Repository<Bank>,
@@ -24,6 +25,8 @@ export class BankService {
     const bank = await this.bankRepository.findOne({ id });
 
     if (!bank) {
+      this.logger.error('findOne: Bank not found');
+      this.logger.error(bank);
       throw new NotFoundException('Bank not found');
     }
 
@@ -34,6 +37,8 @@ export class BankService {
     const bank = await this.bankRepository.findOne({ id });
     
     if (!bank) {
+      this.logger.error('update: Bank not found');
+      this.logger.error(bank);
       throw new NotFoundException('Bank not found');
     }
 
