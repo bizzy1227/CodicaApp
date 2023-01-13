@@ -3,18 +3,41 @@ import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
 
 describe('CategoryController', () => {
-  let controller: CategoryController;
+  let categoryController: CategoryController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CategoryController],
-      providers: [CategoryService],
+      providers: [
+        CategoryController,
+        {
+          provide: CategoryService,
+          useValue: {
+            findAll: jest.fn().mockImplementation(() => []),
+            findOne: jest.fn().mockImplementation(() => ({})),
+          },
+        },
+      ],
     }).compile();
 
-    controller = module.get<CategoryController>(CategoryController);
+    categoryController = module.get<CategoryController>(CategoryController);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(categoryController).toBeDefined();
+  });
+
+  describe('findAll', () => {
+    it('should be return result', async () => {
+      const result = await categoryController.findAll();
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('findOne', () => {
+    it('should be return result', async () => {
+      const result = await categoryController.findOne('1');
+      expect(result).toBeDefined();
+    });
   });
 });

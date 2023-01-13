@@ -43,12 +43,12 @@ export class BankController {
   async update(@Param('id') id: string, @Body() updateBankDto: UpdateBankDto) {
     this.logger.log(`update: update bank with id: ${id}`);
     this.logger.log(JSON.stringify(updateBankDto));
-    return this.bankService.update(+id, updateBankDto);
+    await this.bankService.update(+id, updateBankDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
+  async remove(@Param('id') id: string): Promise<void> {
     this.logger.log(`remove: remove bank with id: ${id}`);
-    return this.bankService.remove(+id);
+    await this.bankService.remove(+id);
   }
 }

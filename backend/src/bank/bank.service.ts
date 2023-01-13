@@ -22,10 +22,10 @@ export class BankService {
   }
 
   async findOne(id: number): Promise<Bank> {
-    const bank = await this.bankRepository.findOne({ id });
+    const bank = await this.bankRepository.findOne(id);
 
     if (!bank) {
-      this.logger.error('findOne: Bank not found');
+      this.logger.error(`findOne: Bank with id: ${id} not found`);
       this.logger.error(bank);
       throw new NotFoundException('Bank not found');
     }
@@ -34,10 +34,10 @@ export class BankService {
   }
 
   async update(id: number, updateBankDto: UpdateBankDto): Promise<void> {
-    const bank = await this.bankRepository.findOne({ id });
+    const bank = await this.bankRepository.findOne(id);
     
     if (!bank) {
-      this.logger.error('update: Bank not found');
+      this.logger.error(`update: Bank with id: ${id} not found`);
       this.logger.error(bank);
       throw new NotFoundException('Bank not found');
     }

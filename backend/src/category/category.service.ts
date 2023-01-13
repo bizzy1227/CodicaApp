@@ -21,10 +21,10 @@ export class CategoryService {
   }
 
   async findOne(id: number) {
-    const category = await this.categoryRepository.findOne({ id });
+    const category = await this.categoryRepository.findOne(id);
 
     if (!category) {
-      this.logger.error('findOne: Category not found');
+      this.logger.error(`findOne: Category with id: ${id} not found`);
       this.logger.error(category);
       throw new NotFoundException('Category not found');
     }
@@ -33,10 +33,10 @@ export class CategoryService {
   }
 
   async update(id: number, updateCategoryDto: CreateUpdateCategoryDto) {
-    const category = await this.categoryRepository.findOne({ id });
+    const category = await this.categoryRepository.findOne(id);
     
     if (!category) {
-      this.logger.error('update: Category not found');
+      this.logger.error(`update: Category with id: ${id} not found`);
       this.logger.error(category);
       throw new NotFoundException('Category not found');
     }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { Category } from '../category/category.entity';
@@ -23,48 +23,43 @@ export class TransactionService {
   ) {}
 
   async create(createTransactionDto: CreateTransactionDto): Promise<Transaction> {
-    try {
-      const categories: Category[] = [];
+    const categories: Category[] = [];
 
-      for await (const id of createTransactionDto.categoriesIds) {
-        const category = await this.categoryService.findOne(id);
+    for await (const id of createTransactionDto.categoriesIds) {
+      const category = await this.categoryService.findOne(id);
 
-        if (!category) {
-          this.logger.error('create: Category not found');
-          this.logger.error(category);
-          throw new NotFoundException('Category not found');
-        }
-
-        categories.push(category);
-      }
-  
-      const bank = await this.bankService.findOne(createTransactionDto.bankId);
-  
-      if (!bank) {
-        this.logger.error('create: Bank not found');
-        this.logger.error(bank);
-        throw new NotFoundException('Bank not found');
-      }
-  
-      const transaction = await this.transactionRepository.save({
-        ...createTransactionDto,
-        categories,
-        bank,
-      });
-  
-      if (!transaction) {
-        this.logger.error('create: Save transaction failed');
-        this.logger.error(transaction);
-        throw new InternalServerErrorException();
+      if (!category) {
+        this.logger.error(`create: Category with id: ${id} not found`);
+        this.logger.error(category);
+        throw new NotFoundException('Category not found');
       }
 
-      await this.bankService.update(bank.id, { balance: bank.balance + createTransactionDto.amount });
-
-      return transaction;
-    } catch (e) {
-      this.logger.error(e);
-      return e;
+      categories.push(category);
     }
+
+    const bank = await this.bankService.findOne(createTransactionDto.bankId);
+
+    if (!bank) {
+      this.logger.error(`create: Bank with id: ${createTransactionDto.bankId} not found`);
+      this.logger.error(bank);
+      throw new NotFoundException('Bank not found');
+    }
+
+    const transaction = await this.transactionRepository.save({
+      ...createTransactionDto,
+      categories,
+      bank,
+    });
+
+    if (!transaction) {
+      this.logger.error('create: Save transaction failed');
+      this.logger.error(transaction);
+      throw new InternalServerErrorException();
+    }
+
+    await this.bankService.update(bank.id, { balance: bank.balance + createTransactionDto.amount });
+
+    return transaction;
   }
 
   async findAll(
@@ -89,7 +84,7 @@ export class TransactionService {
     const transaction = await this.transactionRepository.findOne(id, { relations: ['bank'] });
 
     if (!transaction) {
-      this.logger.error('remove: Transaction not found');
+      this.logger.error(`remove: Transaction with id: ${id} not found`);
       this.logger.error(transaction);
       throw new NotFoundException('Transaction not found');
     }
