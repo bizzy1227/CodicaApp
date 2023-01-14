@@ -8,7 +8,14 @@ describe('WebhookController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [WebhookController],
-      providers: [WebhookService],
+      providers: [
+        {
+          provide: WebhookService,
+          useValue: {
+            createTransaction: jest.fn().mockImplementation(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<WebhookController>(WebhookController);

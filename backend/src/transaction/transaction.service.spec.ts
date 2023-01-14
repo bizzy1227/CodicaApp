@@ -216,7 +216,6 @@ describe('TransactionService', () => {
         new NotFoundException('Bank not found'),
       );
     });
-
   });
 
   describe('findAll', () => {
@@ -258,7 +257,7 @@ describe('TransactionService', () => {
       expect(result['Category 1']).toBe(2);
     });
 
-    it('should be return one category', async () => {
+    it('should be return two category', async () => {
       const result = await transactionService.getStatistic({
         fromPeriod: new Date,
         toPeriod: new Date,

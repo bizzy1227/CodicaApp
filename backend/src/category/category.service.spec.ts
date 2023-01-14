@@ -10,6 +10,7 @@ const categories = [
   {
     id: 1,
     name: 'Test1',
+    transactions: [1],
   },
 ];
 
