@@ -682,9 +682,9 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@nestjs/cli@^9.0.0":
+"@nestjs/cli@^9.1.8":
   version "9.1.8"
-  resolved "https://registry.npmjs.org/@nestjs/cli/-/cli-9.1.8.tgz"
+  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-9.1.8.tgz#e4cb06c0cb628bf08ae143c2c6278a7beb38044b"
   integrity sha512-53laCMoPLAkjyz3405FlMSrHnbr3DGeoaQjY963bEroezLlm/qfQhwj6oGJwtgA28eNFgx68mvQV2f1VZNUJtw==
   dependencies:
     "@angular-devkit/core" "15.0.4"
@@ -3704,6 +3704,11 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+nest@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/nest/-/nest-0.1.6.tgz#81aa0236f0ebc996523e5d3855c73dd382a2b255"
+  integrity sha512-21378J/6pHB9EZMId5yz9DaxVj778pCHhzfXhRLLrLWZydpLgbsyxL5B5QyTSWJBk5L8XbiGgMvNZMb/qBySYg==
 
 node-abort-controller@^3.0.1:
   version "3.0.1"
