@@ -9,7 +9,7 @@ import { Category } from '../category/category.entity';
 @Entity()
 export class Transaction extends BaseDto {
   @ApiProperty()
-  @Column()
+  @Column('numeric', { precision: 16, scale: 2 })
   @IsNumber()
   amount: number;
 

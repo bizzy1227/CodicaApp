@@ -57,7 +57,7 @@ export class TransactionService {
       throw new InternalServerErrorException();
     }
 
-    await this.bankService.update(bank.id, { balance: bank.balance + createTransactionDto.amount });
+    await this.bankService.update(bank.id, { balance: Number(bank.balance) + Number(createTransactionDto.amount) });
 
     return transaction;
   }
@@ -90,7 +90,7 @@ export class TransactionService {
     }
 
     await this.transactionRepository.delete(id);
-    await this.bankService.update(transaction.bank.id, { balance: transaction.bank.balance - transaction.amount });
+    await this.bankService.update(transaction.bank.id, { balance: Number(transaction.bank.balance) - Number(transaction.amount) });
   }
 
   async getStatistic({ fromPeriod, toPeriod, categoryIds }: GetTransactionStatisticDto): Promise<Statistic> {
@@ -112,9 +112,9 @@ export class TransactionService {
       tx.categories.forEach(category => {
         if (categoryIds.length === 0 || categoryIds.includes(category.id)) {
           if (result.hasOwnProperty(category.name)) {
-            result[category.name] += tx.amount;
+            result[category.name] = (Number(result[category.name]) + Number(tx.amount)).toFixed(2);
           } else {
-            result[category.name] = tx.amount;
+            result[category.name] = Number(tx.amount).toFixed(2);
           }
         }
       });

@@ -1,1 +1,1 @@
-export class Statistic { [key: string]: number; }
+export class Statistic { [key: string]: string; }

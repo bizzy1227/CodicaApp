@@ -40,7 +40,10 @@ export class BankController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateBankDto: UpdateBankDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateBankDto: UpdateBankDto,
+  ): Promise<void> {
     this.logger.log(`update: update bank with id: ${id}`);
     this.logger.log(JSON.stringify(updateBankDto));
     await this.bankService.update(+id, updateBankDto);

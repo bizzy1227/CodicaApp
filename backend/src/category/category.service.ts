@@ -12,15 +12,15 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async create(createCategoryDto: CreateUpdateCategoryDto) {
+  async create(createCategoryDto: CreateUpdateCategoryDto): Promise<void> {
     await this.categoryRepository.save(createCategoryDto);
   }
 
-  async findAll() {
+  async findAll(): Promise<Category[]> {
     return await this.categoryRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Category> {
     const category = await this.categoryRepository.findOne(id);
 
     if (!category) {
@@ -32,7 +32,10 @@ export class CategoryService {
     return category;
   }
 
-  async update(id: number, updateCategoryDto: CreateUpdateCategoryDto) {
+  async update(
+    id: number,
+    updateCategoryDto: CreateUpdateCategoryDto,
+  ): Promise<void> {
     const category = await this.categoryRepository.findOne(id);
     
     if (!category) {
@@ -47,7 +50,7 @@ export class CategoryService {
     });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     const category = await this.categoryRepository.findOne(id, { relations: ['transactions'] });
 
     if (category.transactions.length) {

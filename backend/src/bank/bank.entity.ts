@@ -9,7 +9,7 @@ export class Bank extends BaseDto {
   @IsString()
   name: string;
 
-  @Column()
+  @Column('numeric', { precision: 16, scale: 2 })
   @IsNumber()
   balance: number;
 
