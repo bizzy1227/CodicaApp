@@ -253,8 +253,8 @@ describe('TransactionService', () => {
         toPeriod: new Date,
         categoryIds: [1],
       });
-      expect(result).toStrictEqual({ 'Category 1': 2 });
-      expect(result['Category 1']).toBe(2);
+      expect(result).toStrictEqual({ 'Category 1': "2.00" });
+      expect(result['Category 1']).toBe("2.00");
     });
 
     it('should be return two category', async () => {
@@ -263,9 +263,9 @@ describe('TransactionService', () => {
         toPeriod: new Date,
         categoryIds: [1, 2],
       });
-      expect(result).toStrictEqual({ 'Category 1': 2, 'Category 2': 1 });
-      expect(result['Category 1']).toBe(2);
-      expect(result['Category 2']).toBe(1);
+      expect(result).toStrictEqual({ 'Category 1': "2.00", 'Category 2': "1.00" });
+      expect(result['Category 1']).toBe("2.00");
+      expect(result['Category 2']).toBe("1.00");
     });
   });
 });
