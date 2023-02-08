@@ -19,12 +19,12 @@ transactions are added or deleted.
 ### API endpoints requirements
 - Bank: create, delete, get one, get all, edit
 - Transaction: create (webhook), delete, get all
--- To get all transactions, you need to implement pagination
--- For webhook add api key authorization
+  - To get all transactions, you need to implement pagination
+  - For webhook add api key authorization
 - Category: create, delete, get one, get all, edit
 - Method for getting statistics
--- Accepts categoryIds, fromPeriod, toPeriod
--- Returns an object in the format: `{ category name: balance }`
+  - Accepts categoryIds, fromPeriod, toPeriod
+  - Returns an object in the format: `{ category name: balance }`
 
 ## Installation
 
