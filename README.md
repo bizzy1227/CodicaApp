@@ -26,6 +26,11 @@ transactions are added or deleted.
   - Accepts categoryIds, fromPeriod, toPeriod
   - Returns an object in the format: `{ category name: balance }`
 
+### Other requirements
+- Cover the server API functionality with unit tests.
+- Implement Logging.
+- Add global error handling.
+
 ## Installation
 
 1. Go to the `backend` folder and create a new `.env` file
