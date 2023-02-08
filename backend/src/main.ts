@@ -11,10 +11,10 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalHttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const config = new DocumentBuilder()
-    .setTitle('Codica API')
-    .setDescription('The Codica API description')
+    .setTitle('Test task API')
+    .setDescription('The test task API description')
     .setVersion('1.0')
-    .addTag('codica')
+    .addTag('Test task')
     .addApiKey({type: 'apiKey', name: 'X-API-KEY', in: 'header'}, 'X-API-KEY')
     .build();
   const document = SwaggerModule.createDocument(app, config);

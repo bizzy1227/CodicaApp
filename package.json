@@ -1,8 +1,8 @@
 {
-  "name": "CodicaApp",
+  "name": "TestTask",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/bizzy1227/CodicaApp.git",
+  "repository": "https://github.com/bizzy1227/TestTask.git",
   "author": "Yaroslav K",
   "license": "MIT"
 }

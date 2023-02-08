@@ -28,6 +28,6 @@ services:
     expose:
       - 5432
     environment:
-      POSTGRES_DB: codica-db
+      POSTGRES_DB: test-task-db
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
